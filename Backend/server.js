@@ -230,3 +230,54 @@ app.get('/student/:id/gpa', authenticateToken, (req, res) => {
 app.listen(8081, () => {
   console.log("🚀 Server listening on port 8081");
 });
+
+//*****************************BOOKNEST*********************************8 */
+//List all books
+app.get('/books', (req, res) => {
+  db.query("SELECT * FROM books", (err, results) => {
+    if (err) return res.status(500).json(err);
+    return res.json(results);
+  });
+});
+
+// Search books by title
+app.get('/books/search/:title', (req, res) => {
+  const title = req.params.title;
+  const sql = "SELECT * FROM books WHERE title LIKE ?";
+  db.query(sql, [`%${title}%`], (err, results) => {
+    if (err) return res.status(500).json(err);
+    return res.json(results);
+  });
+});
+
+//Add a new book
+app.post('/books', (req, res) => {
+  const { title, isbn, price, publication_year, stock } = req.body;
+  const sql = "INSERT INTO books (title, isbn, price, publication_year, stock) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [title, isbn, price, publication_year, stock], (err, result) => {
+    if (err) return res.status(500).json(err);
+    return res.status(201).json({ message: "Book added", bookId: result.insertId });
+  });
+});
+
+//Update a book by ID
+app.put('/books/:id', (req, res) => {
+  const id = req.params.id;
+  const { title, isbn, price, publication_year, stock } = req.body;
+  const sql = "UPDATE books SET title = ?, isbn = ?, price = ?, publication_year = ?, stock = ? WHERE id = ?";
+  db.query(sql, [title, isbn, price, publication_year, stock, id], (err, result) => {
+    if (err) return res.status(500).json(err);
+    if (result.affectedRows === 0) return res.status(404).json({ message: "Book not found" });
+    return res.json({ message: "Book updated" });
+  });
+});
+
+//Delete a book by ID
+app.delete('/books/:id', (req, res) => {
+  const id = req.params.id;
+  db.query("DELETE FROM books WHERE id = ?", [id], (err, result) => {
+    if (err) return res.status(500).json(err);
+    if (result.affectedRows === 0) return res.status(404).json({ message: "Book not found" });
+    return res.json({ message: "Book deleted" });
+  });
+});

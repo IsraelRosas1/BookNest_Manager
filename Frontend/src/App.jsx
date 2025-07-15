@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
@@ -12,6 +13,7 @@ import StudentLogin from "./pages/StudentLoginPage";
 import StudentRegister from "./pages/StudentRegisterPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import StudentGPAReport from "./pages/StudentGPAReport";
+import BookManagerPage from './pages/BookManagerPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,6 +49,8 @@ function App() {
               <>
                 <Link to="/dashboard" style={{ marginRight: "10px" }}>Dashboard</Link>
                 <Link to="/gpa" style={{ marginRight: "10px" }}>GPA Report</Link>
+                <Link to="/books" style={{ marginRight: "10px" }}>Book Manager</Link> 
+
                 <button onClick={handleLogout} style={{ cursor: "pointer" }}>Logout</button>
               </>
             )}
@@ -70,6 +74,8 @@ function App() {
               path="/dashboard"
               element={isAuthenticated ? <StudentDashboard /> : <Navigate to="/login" />}
             />
+            <Route path="/books" element={<BookManagerPage />} />
+
             <Route
               path="/gpa"
               element={isAuthenticated ? <StudentGPAReport /> : <Navigate to="/login" />}
