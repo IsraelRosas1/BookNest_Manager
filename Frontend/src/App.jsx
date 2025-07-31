@@ -38,7 +38,7 @@ function App() {
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "20px" }}>
         {/* Header */}
         <header style={{ marginBottom: "20px" }}>
-          <h1 style={{ marginBottom: "10px" }}>🎓 Student Portal</h1>
+          <h1 style={{ marginBottom: "10px" }}>Customer Portal</h1>
           <nav style={{ marginBottom: "10px" }}>
             {!isAuthenticated ? (
               <>
@@ -47,8 +47,8 @@ function App() {
               </>
             ) : (
               <>
-                <Link to="/dashboard" style={{ marginRight: "10px" }}>Dashboard</Link>
-                <Link to="/gpa" style={{ marginRight: "10px" }}>GPA Report</Link>
+                <Link to="/dashboard" style={{ marginRight: "10px" }}>Order Book</Link>
+                <Link to="/gpa" style={{ marginRight: "10px" }}>Order History</Link>
                 <Link to="/books" style={{ marginRight: "10px" }}>Book Manager</Link> 
 
                 <button onClick={handleLogout} style={{ cursor: "pointer" }}>Logout</button>

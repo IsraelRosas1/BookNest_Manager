@@ -1,0 +1,50 @@
+
+
+-- Table for storing customer information
+-- All data points from "Customer Registration" are included.
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL, -- Email is unique for each customer
+    phone VARCHAR(20),
+    password VARCHAR(255) NOT NULL,      -- Note: Always store hashed passwords, not plain text!
+    shipping_address TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing book information
+-- Based on the columns in the provided INSERT statement.
+CREATE TABLE books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    isbn VARCHAR(20) UNIQUE NOT NULL,    -- ISBN is a unique identifier for each book
+    price DECIMAL(10, 2) NOT NULL,       -- DECIMAL is used for currency to avoid floating-point issues
+    publication_year YEAR,
+    stock INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing order details
+-- This links customers to their purchases and records the order history.
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    shipping_address TEXT NOT NULL,      -- Storing address here captures the address at the time of order
+    status VARCHAR(50) NOT NULL,         -- E.g., 'Pending', 'Shipped', 'Delivered'
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);
+
+-- Junction table to link orders and books
+-- This allows an order to contain multiple books, each with a specific quantity and price.
+CREATE TABLE order_items (
+    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    book_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price_at_time_of_order DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE
+);
+
