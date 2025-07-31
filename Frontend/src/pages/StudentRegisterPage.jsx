@@ -1,35 +1,30 @@
 // ==============================================
-// 📝 StudentRegisterPage.jsx
-// This page handles student registration
-// It collects name, email, password, birthday, and GPA,
-// submits to the backend, and redirects to login on success.
+// 🧾 CustomerRegisterPage.jsx
+// Handles registration for new customers
+// Collects name, email, password, and shipping address
 // ==============================================
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function StudentRegisterPage() {
-  // 🧠 State to manage form inputs
+function StudentRegister() {
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: '',
-    birthday: '',
-    gpa: ''
+    // CORRECTED: Changed 'address' to 'shipping_address' to match the backend
+    shipping_address: ''
   });
 
-  const navigate = useNavigate(); // 🔁 Navigation hook
+  const navigate = useNavigate();
 
-  // 🔄 Update form state on input change
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 🚀 Submit form data to backend
   const handleRegister = (e) => {
-    e.preventDefault(); // ❌ Prevent default form reload
+    e.preventDefault();
 
-    // 📡 Send POST request to backend
     fetch('http://localhost:8081/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -37,18 +32,14 @@ function StudentRegisterPage() {
     })
       .then(res => res.json())
       .then(data => {
-        alert(data.message); // ✅ Show feedback
-        if (data.studentId) navigate('/login'); // 🔁 Redirect to login on success
+        alert(data.message);
+        if (data.customerId) navigate('/login');
       });
   };
 
   return (
-    <div style={{
-      maxWidth: "960px",
-      margin: "0 auto",
-      padding: "20px"
-    }}>
-      <h2>📝 Register Student</h2>
+    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "20px" }}>
+      <h2>🧾 Register Customer</h2>
 
       <form onSubmit={handleRegister}>
         <input
@@ -78,20 +69,11 @@ function StudentRegisterPage() {
         /><br />
 
         <input
-          name="birthday"
-          type="date"
-          value={form.birthday}
+          // CORRECTED: Changed 'name' attribute to 'shipping_address'
+          name="shipping_address"
+          value={form.shipping_address}
           onChange={handleChange}
-          required
-        /><br />
-
-        <input
-          name="gpa"
-          type="number"
-          step="0.01"
-          value={form.gpa}
-          onChange={handleChange}
-          placeholder="GPA"
+          placeholder="Shipping Address"
           required
         /><br />
 
@@ -101,4 +83,4 @@ function StudentRegisterPage() {
   );
 }
 
-export default StudentRegisterPage;
+export default StudentRegister;
